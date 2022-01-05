@@ -1,8 +1,7 @@
 import React from "react";
-import App from "./_app"
 
 const Home = () => {
-  return <App/>
-};
+  return <h1>Home</h1>
+}
 
 export default Home
