@@ -1,6 +1,6 @@
 import React from "react";
-import { Formik, Form, Field, ErrorMessage} from "formik";
-import { useState } from "react/cjs/react.development";
+import { Formik, ErrorMessage} from "formik";
+import { Form, Button } from 'react-bootstrap'
 
 const Login = () => {
   return <>
@@ -34,19 +34,38 @@ const Login = () => {
         isSubmitting,
         handleChange,
         handleSubmit,
+        handleBlur,
         values,
         touched,
         errors
       })=>(
-        <Form onSubmit={handleSubmit}>
-        <label for="email">Correo electrónico</label>
-        <Field type="email" id="email" name="email" onChange={handleChange} value={values.email}/>
-        {errors.email && touched.email && errors.email}
-        <label for="password">Contraseña</label>
-        <Field type="password" id="password" name="password" onChange={handleChange} value={values.password}></Field>
-        {errors.password && touched.password && errors.password}
-        <button type="submit" disabled={isSubmitting}>Iniciar</button>
-      </Form>
+        <form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3" controlId="formGroupEmail">
+            <Form.Label>Correo electrónico</Form.Label>
+            <Form.Control 
+              type="email" 
+              placeholder="name@example.com" 
+              name="email" 
+              onChange={handleChange} 
+              onBlur={handleBlur}
+              value={values.email}
+            />
+            <div>{errors.email && touched.email && errors.email}</div>
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="formGroupPassword">
+            <Form.Label>Contraseña</Form.Label>
+            <Form.Control 
+              type="password" 
+              placeholder="**********" 
+              name="password" 
+              onChange={handleChange} 
+              onBlur={handleBlur}
+              value={values.password}
+            />
+            <div>{errors.password && touched.password && errors.password}</div>
+          </Form.Group>
+          <Button type="submit" disabled={isSubmitting}>Iniciar</Button>
+        </form>
       )}
       
     </Formik>
