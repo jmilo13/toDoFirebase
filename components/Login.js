@@ -1,10 +1,18 @@
 import React, {useState} from "react";
+import Swal from 'sweetalert2'
 import { Formik, ErrorMessage} from "formik";
 import { Container, Stack, Form, Button } from 'react-bootstrap'
 import firebaseApp from "../credentials";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  signInWithRedirect,
+  GoogleAuthProvider,
+} from "firebase/auth"
 
 const auth = getAuth(firebaseApp)
+const googleProvider = new GoogleAuthProvider()
 
 const Login = () => {
   const [isRegister, setIsRegister] = useState(true)
@@ -34,11 +42,19 @@ const Login = () => {
         const name = values.name;
         const email = values.email;
         const password = values.password;
-        console.log(isRegister)
         if(isRegister){
-          console.log('ingreso')
-          const user = await signInWithEmailAndPassword(auth, email, password)
-          console.log(user)
+          try{
+            const user = await signInWithEmailAndPassword(auth, email, password)
+            console.log(user)
+          }catch(error){
+            console.log(error)
+            Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Las credenciales no existen. Debes crear una cuenta',
+            })
+            setIsRegister(!isRegister)
+          }
         }else{
           const user = await createUserWithEmailAndPassword(auth, email, password)
           console.log(name);
@@ -99,6 +115,7 @@ const Login = () => {
               </Form.Group>
               <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Cargando" : "Enviar" }</Button>
             </form>
+            <Button onClick={() => signInWithRedirect(auth, googleProvider)}>Acceder con Google</Button>
             <Button onClick={() => setIsRegister(!isRegister)}>{isRegister ? "Crear nueva cuenta" : "¿Ya tiene cuenta? Inicia Sesión"}</Button>
           </Stack>
         </Container>
