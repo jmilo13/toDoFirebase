@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import Home from "../components/Home";
 import Login from "../components/Login";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import firebaseApp from "../credentials";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 

@@ -1,0 +1,10 @@
+.container{
+  max-width: 500px;
+  &__buttons{
+    flex-wrap: wrap;
+    justify-content: center;   
+  }
+  button{
+    width: 180px;
+  }
+}

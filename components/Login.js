@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import Swal from 'sweetalert2'
 import { Formik, ErrorMessage} from "formik";
-import { Container, Stack, Form, Button } from 'react-bootstrap'
+import { Container, Row, Col, Stack, Form, Button } from 'react-bootstrap'
 import firebaseApp from "../credentials";
 import { 
   getAuth, 
@@ -10,6 +10,7 @@ import {
   signInWithRedirect,
   GoogleAuthProvider,
 } from "firebase/auth"
+import styles from '../styles/Login.module.scss'
 
 const auth = getAuth(firebaseApp)
 const googleProvider = new GoogleAuthProvider()
@@ -73,7 +74,7 @@ const Login = () => {
         touched,
         errors
       })=>(
-        <Container>
+        <Container className= {styles.container}>
           <Stack gap={3}>
             <h1>{isRegister ? "Iniciar Sesión" : "Registrarse"}</h1>
             <form onSubmit={handleSubmit}>
@@ -115,12 +116,14 @@ const Login = () => {
               </Form.Group>
               <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Cargando" : "Enviar" }</Button>
             </form>
-            <Button onClick={() => signInWithRedirect(auth, googleProvider)}>Acceder con Google</Button>
-            <Button onClick={() => setIsRegister(!isRegister)}>{isRegister ? "Crear nueva cuenta" : "¿Ya tiene cuenta? Inicia Sesión"}</Button>
+            <hr/>
+            <Stack gap={2} className={styles.container__buttons}>
+              <Button variant='secondary' onClick={() => signInWithRedirect(auth, googleProvider)}>Acceder con Google</Button>
+              <Button onClick={() => setIsRegister(!isRegister)}>{isRegister ? "Crear nueva cuenta" : "¿Ya tiene cuenta? Inicia Sesión"}</Button>
+            </Stack>           
           </Stack>
         </Container>
-      )}
-      
+      )}      
     </Formik>
   </>
 }
