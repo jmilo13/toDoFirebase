@@ -1,24 +1,26 @@
 import React from "react";
 import { Container, Stack, Button, Row, Col } from "react-bootstrap";
-import firebaseApp from "../credentials";
-import { getAuth, signOut } from "firebase/auth";
-
-const auth = getAuth(firebaseApp)
 
 const AllTasks = ({tasks}) => { 
   return(
   <Container>
     <Stack>
       <h1>Lista de tareas</h1>
-      {tasks.map(task => {
+      {tasks ? tasks.map(task => {
         return(
-        <Row>
-          <Col>{task.description}</Col>
-          <Col><Button>Ver</Button></Col>
-          <Col><Button>Borrar</Button></Col>
-        </Row>
+          <React.Fragment key={task.id}>
+          <Row>
+            <Col>{task.description}</Col>
+            <Col><Button>Ver</Button></Col>
+            <Col><Button>Borrar</Button></Col>
+          </Row>
+          <hr/>
+          </React.Fragment>
         )
-      })}
+      }): <>
+        <p>No hay tareas</p>
+        <Button>Agregar tarea</Button>
+      </>}
     </Stack>
   </Container>
   )

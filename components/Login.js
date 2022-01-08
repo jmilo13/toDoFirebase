@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 import Swal from 'sweetalert2'
 import { Formik, ErrorMessage} from "formik";
-import { Container, Row, Col, Stack, Form, Button } from 'react-bootstrap'
+import { Container, Stack, Form, Button } from 'react-bootstrap'
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import firebaseApp from "../credentials";
 import { 
   getAuth, 
@@ -9,21 +10,23 @@ import {
   signInWithEmailAndPassword,
   signInWithRedirect,
   GoogleAuthProvider,
+  updateProfile,
 } from "firebase/auth"
 import styles from '../styles/Login.module.scss'
 
 const auth = getAuth(firebaseApp)
 const googleProvider = new GoogleAuthProvider()
+const firestore = getFirestore(firebaseApp)
 
 const Login = () => {
   const [isRegister, setIsRegister] = useState(true)
   return <>
     <Formik
-      initialValues={{ name: isRegister ? 'default' : '', email: '', password: '' }}
+      initialValues={{ name: '', email: '', password: '' }}
       validate={values => {
         const errors = {};
-        if (!values.name) {
-          errors.name = 'Este campo es obligatorio';
+        if (!isRegister && !values.name) {
+          errors.name = 'Este campo es obligatorio'
         }
         if (!values.email) {
           errors.email = 'Este campo es obligatorio';
@@ -46,7 +49,6 @@ const Login = () => {
         if(isRegister){
           try{
             const user = await signInWithEmailAndPassword(auth, email, password)
-            console.log(user)
           }catch(error){
             console.log(error)
             Swal.fire({
@@ -56,13 +58,13 @@ const Login = () => {
             })
             setIsRegister(!isRegister)
           }
-        }else{
+        }else{     
           const user = await createUserWithEmailAndPassword(auth, email, password)
-          console.log(name);
-          console.log(user);
-        }
+          const ref = doc(firestore, `users/${email}`)
+          setDoc(ref, {info: {email: email, name: name }, tasks:[]})
+          const update = await updateProfile(auth.currentUser, {displayName: name})
+        }  
         setSubmitting(false);
-        
       }}
     >
       {({
