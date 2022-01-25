@@ -20,7 +20,7 @@ const firestore = getFirestore(firebaseApp)
 
 const Login = () => {
   const [isRegister, setIsRegister] = useState(true)
-  return <>
+  return <section className= {styles.containerForm}>
     <Formik
       initialValues={{ name: '', email: '', password: '' }}
       validate={values => {
@@ -76,7 +76,7 @@ const Login = () => {
         touched,
         errors
       })=>(
-        <Container className= {styles.container}>
+        <Container>
           <Stack gap={3}>
             <h1>{isRegister ? "Iniciar Sesión" : "Registrarse"}</h1>
             <form onSubmit={handleSubmit}>
@@ -127,7 +127,7 @@ const Login = () => {
         </Container>
       )}      
     </Formik>
-  </>
+  </section>
 }
 
 export default Login

@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from "react";
-import { Button } from "react-bootstrap";
+import Image from 'next/image'
+import { Container } from "react-bootstrap";
 import firebaseApp from "../credentials";
 import { getAuth, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import NewTask from "./NewTask";
 import AllTasks from "./AllTasks";
+import styles from "@styles/home.module.scss"
+import ButtonCircle from "@components/ButtonCircle";
 
 const auth = getAuth(firebaseApp)
 const firestore = getFirestore(firebaseApp)
@@ -13,6 +16,7 @@ const firestore = getFirestore(firebaseApp)
 
 const Home = ({userEmail, userName}) => {
   const [tasks, setTasks] = useState(null)
+  const [show, setShow ] = useState(false)
 
   useEffect(()=>{
     async function searchDocument (idDocument) {
@@ -25,12 +29,21 @@ const Home = ({userEmail, userName}) => {
 
   },[])
 
-  return <>
-    <h1>{userName ? `Hola ${userName}` : 'Bienvenido, has creado tu cuenta'}</h1>
-    <Button onClick={()=>signOut(auth)}>Cerrar Sesión</Button>
-    <NewTask/>
-    <AllTasks tasks={tasks}/>
-  </>
+  return <section className={styles.homeContainer}>
+    <div className={styles.header}>
+      <h1>{userName ? `Hola ${userName}` : 'Bienvenido, has creado tu cuenta'}</h1>
+      <ButtonCircle color='green' icon='/icons/menu-white.png' click={()=> setShow(!show)}/>
+      <div className={show ? styles.toolsContainer : styles.none}>
+        <ButtonCircle  icon='/icons/logout.png' color='red' click={()=>signOut(auth)}/>
+        <NewTask/>
+      </div>
+        
+    </div>
+    <Container>
+      
+      <AllTasks tasks={tasks}/>
+    </Container>
+  </section>
 }
 
 export default Home

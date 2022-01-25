@@ -1,0 +1,20 @@
+.homeContainer{
+  .header{
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    position: relative;
+    .toolsContainer{
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      position: absolute;
+      bottom: -116px;
+      right: 17px;
+    }
+    .none{
+      display: none;
+    }
+  }
+  
+}

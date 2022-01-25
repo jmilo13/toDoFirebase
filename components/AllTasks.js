@@ -19,7 +19,6 @@ const AllTasks = ({tasks}) => {
         )
       }): <>
         <p>No hay tareas</p>
-        <Button>Agregar tarea</Button>
       </>}
     </Stack>
   </Container>
