@@ -40,8 +40,11 @@ const Home = ({userEmail, userName}) => {
         
     </div>
     <Container>
-      
-      <AllTasks tasks={tasks}/>
+      <AllTasks 
+        tasks={tasks}
+        userEmail={userEmail}
+        setTasks={setTasks}
+      />
     </Container>
   </section>
 }
