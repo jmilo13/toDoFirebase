@@ -17,6 +17,7 @@ const firestore = getFirestore(firebaseApp)
 const Home = ({userEmail, userName}) => {
   const [tasks, setTasks] = useState(null)
   const [show, setShow ] = useState(false)
+  const [showNew, setShowNew] = useState(false)
 
   useEffect(()=>{
     async function searchDocument (idDocument) {
@@ -35,9 +36,8 @@ const Home = ({userEmail, userName}) => {
       <ButtonCircle color='green' icon='/icons/menu-white.png' click={()=> setShow(!show)}/>
       <div className={show ? styles.toolsContainer : styles.none}>
         <ButtonCircle  icon='/icons/logout.png' color='red' click={()=>signOut(auth)}/>
-        <NewTask/>
-      </div>
-        
+        <ButtonCircle color='blue' icon='/icons/plus.png' click={()=>setShowNew(!showNew)}/>
+      </div>  
     </div>
     <Container>
       <AllTasks 
@@ -46,6 +46,13 @@ const Home = ({userEmail, userName}) => {
         setTasks={setTasks}
       />
     </Container>
+    {showNew && <NewTask 
+      showNew={showNew} 
+      setShowNew={setShowNew}
+      tasks={tasks}
+      userEmail={userEmail}
+      setTasks={setTasks}
+    />}
   </section>
 }
 
