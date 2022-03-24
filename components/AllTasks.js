@@ -21,7 +21,7 @@ const AllTasks = ({tasks, userEmail, setTasks}) => {
           <React.Fragment key={task.id}>
           <Row>
             <Col>{task.description}</Col>
-            <Col><Button>Ver archivo</Button></Col>
+            {task.file && <Col><a href={task.file} target="_blank"><Button>Ver archivo</Button></a></Col>}
             <Col><Button onClick={() => deleteTask(task.id)}>Borrar</Button></Col>
           </Row>
           <hr/>

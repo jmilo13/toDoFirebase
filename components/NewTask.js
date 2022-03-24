@@ -6,11 +6,19 @@ import styles from '@styles/newTask.module.scss'
 
 import firebaseApp from "../credentials";
 import { getFirestore, updateDoc, doc } from "firebase/firestore";
-
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage'
 
 const firestore = getFirestore(firebaseApp)
+const storage = getStorage(firebaseApp)
 
 const NewTask = ({showNew, setShowNew, tasks, userEmail, setTasks}) => {
+  let localFile 
+  let downloadUrl = ''
+
+  const handleFile = async (e) => {
+    localFile = e.target.files[0]
+  }
+
   return <section className={styles.containerForm} onClick={()=>setShowNew(!showNew)}>
     <button className={styles.closeButton} onClick={()=>setShowNew(!showNew)}>X</button>
     <Container className={styles.form} onClick={(e)=>e.stopPropagation()}>
@@ -25,16 +33,24 @@ const NewTask = ({showNew, setShowNew, tasks, userEmail, setTasks}) => {
       }}
       onSubmit={async (values, { setSubmitting }) => {
         const task = values.task;
-        const file = values.file ? values.file : '';
-          
-        const newTasks = tasks ? [...tasks, {id: new Date(), description: task, file: file}] :
-         [{id: new Date() , description: task, file: file}]
 
-        const ref = doc(firestore, `users/${userEmail}`)
-        updateDoc(ref, {tasks:[...newTasks]})
+        //LOAD FILE ON STORAGE
+        if(localFile){
+          const fileRef = ref(storage, `docuemnts/${localFile.name}`)
+          await uploadBytes(fileRef, localFile)
+          downloadUrl = await getDownloadURL(fileRef)
+        }
+        //END LOAD
+
+        const newTasks = tasks ? [...tasks, {id: new Date(), description: task, file: downloadUrl}] :
+         [{id: new Date() , description: task, file: downloadUrl}]
+
+        const docRef = doc(firestore, `users/${userEmail}`)
+        updateDoc(docRef, {tasks:[...newTasks]})
         setTasks(newTasks)         
         setSubmitting(false);
         setShowNew(!showNew)
+     
       }}
     >
       {({
@@ -64,9 +80,7 @@ const NewTask = ({showNew, setShowNew, tasks, userEmail, setTasks}) => {
                 <Form.Control 
                   type="file" 
                   name="file" 
-                  onChange={handleChange} 
-                  onBlur={handleBlur}
-                  value={values.file}
+                  onChange={handleFile}
                 />
                 <ErrorMessage name="file" />
               </Form.Group>
