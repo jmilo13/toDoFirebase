@@ -4,6 +4,8 @@ import Login from "../components/Login";
 import firebaseApp from "../credentials";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
+import '../styles/global-styles/global.scss'
+
 const auth = getAuth(firebaseApp)
 
 const App = () => {

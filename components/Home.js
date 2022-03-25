@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Image from 'next/image'
-import { Container } from "react-bootstrap";
+import { Container, Button, Stack} from "react-bootstrap";
 import firebaseApp from "../credentials";
 import { getAuth, signOut } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
@@ -30,15 +30,21 @@ const Home = ({userEmail, userName}) => {
 
   },[])
 
-  return <section className={styles.homeContainer}>
-    <div className={styles.header}>
+  return (
+  <section className={styles.homeContainer}>
+    <header className={styles.header}>
       <h1>{userName ? `Hola ${userName}` : 'Bienvenido, has creado tu cuenta'}</h1>
-      <ButtonCircle color='green' icon='/icons/menu-white.png' click={()=> setShow(!show)}/>
-      <div className={show ? styles.toolsContainer : styles.none}>
-        <ButtonCircle  icon='/icons/logout.png' color='red' click={()=>signOut(auth)}/>
-        <ButtonCircle color='blue' icon='/icons/plus.png' click={()=>setShowNew(!showNew)}/>
-      </div>  
-    </div>
+    {/* <ButtonCircle color='green' icon='/icons/menu-white.png' click={()=> setShow(!show)}/> */}
+      {/* <div className={show ? styles.toolsContainer : styles.none}> */}
+      <Stack direction="horizontal" gap={2}>
+        <Button variant="primary" onClick={()=>setShowNew(!showNew)}>
+          <div className="svgEmbebed" data-src="/icons/plus.svg"></div>
+        </Button>
+        <Button variant="danger" onClick={()=>signOut(auth)}>
+          <div className="svgEmbebed" data-src="/icons/logout.svg"></div>
+        </Button>
+      </Stack>  
+    </header>
     <Container>
       <AllTasks 
         tasks={tasks}
@@ -54,6 +60,6 @@ const Home = ({userEmail, userName}) => {
       setTasks={setTasks}
     />}
   </section>
-}
+  )}
 
 export default Home

@@ -8,7 +8,7 @@ const ButtonCircle = ({icon, color, click}) => {
   return (
     <button  className={styles.logOutButton} style={{backgroundColor: color}} onClick={click}>
       <div className={styles.imageContainer}>
-        <Image src={icon} layout="fill"/>
+        <div className="svgEmbebed" data-src={icon}></div>
       </div>
     </button> 
   )
